@@ -20,19 +20,29 @@ pub(crate) fn as_uuid(s: String) -> Uuid {
     }
 }
 
-fn get_epoch<T>(timezone: &T) -> DateTime<T>
+fn get_another_epoch<T>(timezone: &T) -> Date<T>
 where
     T: TimeZone,
 {
-        timezone.ymd(1900, 1, 1).and_hms(0, 0, 0)
+        timezone.ymd(1969, 1, 1)
+}
+
+fn get_unix_epoch<T>(timezone: &T) -> Date<T>
+where
+    T: TimeZone,
+{
+        timezone.ymd(1970, 1, 1)
 }
 
 fn main() {
-    println!("Hello, world! {}", Local::now());
-    println!("utc       ={:?}", get_epoch(&Utc));
-    println!("fixed+9   ={:?}", get_epoch(&FixedOffset::east(9 * 3600)));
-    println!("fixed+9   ={:?}", get_epoch(&FixedOffset::east(0)));
-    println!("local     ={:?}", get_epoch(&Local));
+    println!("utc       ={:?}", get_unix_epoch(&Utc));
+    println!("fixed+9   ={:?}", get_unix_epoch(&FixedOffset::east(9 * 3600)));
+    println!("fixed+9   ={:?}", get_unix_epoch(&FixedOffset::east(0)));
+    println!("local     ={:?}", get_unix_epoch(&Local));
+    println!("utc       ={:?}", get_another_epoch(&Utc));
+    println!("fixed+9   ={:?}", get_another_epoch(&FixedOffset::east(9 * 3600)));
+    println!("fixed+9   ={:?}", get_another_epoch(&FixedOffset::east(0)));
+    println!("local     ={:?}", get_another_epoch(&Local));
 }
 
 #[cfg(test)]
